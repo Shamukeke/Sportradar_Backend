@@ -33,6 +33,8 @@ class Activity(models.Model):
 
     class Meta:
         ordering = ['date', 'time']   # tri natif par date puis heure
+        verbose_name = "Activité"               # <-- ici, le singulier
+        verbose_name_plural = "Activités"       # <-- ici, le pluriel
 
     @property
     def participants(self) -> int:

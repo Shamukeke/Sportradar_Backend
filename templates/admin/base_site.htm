@@ -1,0 +1,12 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{# remplace le <title> dans l’onglet navigateur #}
+    {% block title %}SportRadar Admin{% endblock %}
+
+    {# remplace le bloc "branding" qui contient par défaut "Django administration" #}
+    {% block branding %}
+    <a href="{% url 'admin:index' %}">
+        <img src="{% static 'images/logo_sportradar_blanc.png' %}" alt="SportRadar" class="h-8">
+    </a>
+    {% endblock %}

@@ -1,3 +1,4 @@
+from tabnanny import verbose
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -17,6 +18,10 @@ class CustomUser(AbstractUser):
     USERNAME_FIELD = 'email'
     # username reste requis sauf si on override plus
     REQUIRED_FIELDS = ['username']
+
+    class Meta:
+        verbose_name = 'Utilisateur'
+        verbose_name_plural = 'Utilisateurs'
 
     def __str__(self):
         return self.email
