@@ -40,5 +40,16 @@ class Activity(models.Model):
     def participants(self) -> int:
         return self.attendees.count()
 
+    VENUE_CHOICES = [
+        ('inside', 'Intérieur'),
+        ('outside', 'Extérieur'),
+    ]
+    venue = models.CharField(
+        max_length=10,
+        choices=VENUE_CHOICES,
+         default='inside',
+        help_text="Lieu : 'inside' ou 'outside' (nullable temporaire)"
+    )
+
     def __str__(self):
         return self.name

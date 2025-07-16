@@ -22,8 +22,9 @@ urlpatterns = [
     path('api/', include('users.urls')),
     # endpoints activités : /api/activities/, /api/activities/<pk>/, /api/activities/my-activities/, etc.
     path('api/activities/', include('activities.urls')),
-    #path('api/companies/', include('companies.urls')),
+    path('api/companies/', include('companies.urls')),
     path('api/subscriptions/',include('subscriptions.urls')),
+    path('api/places/', include('companies.urls')),
     
     
 ]
