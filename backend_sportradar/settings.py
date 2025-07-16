@@ -1,9 +1,12 @@
+
+from pathlib import Path
 import os
 from dotenv import load_dotenv
 load_dotenv()
 from datetime import timedelta
 import datetime
-from pathlib import Path
+from decouple import config
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -13,7 +16,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-l&k6fas!-t%2vtp)n@n2o237w&64jca&qah9e=)w#qw82w%8vc'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
