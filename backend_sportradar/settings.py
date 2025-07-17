@@ -86,6 +86,24 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'backend_sportradar.urls'
 WSGI_APPLICATION = 'backend_sportradar.wsgi.application'
 
+
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'APP_DIRS': True,  # ← Essentiel pour l'admin
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
 # Database
 DATABASES = {
     'default': dj_database_url.config(
