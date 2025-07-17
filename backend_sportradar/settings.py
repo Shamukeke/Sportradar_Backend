@@ -26,7 +26,9 @@ def get_env(var_name, default=None, cast=str):
 # SECURITY
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', 
+                      default='localhost,127.0.0.1', 
+                      cast=Csv())
 
 # Applications
 INSTALLED_APPS = [

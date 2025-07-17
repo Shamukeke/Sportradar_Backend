@@ -1,0 +1,138 @@
+/* 1) Sidebar & header en bleu nuit (#0a1128) */
+.main-header,
+.main-sidebar {
+    background-color: #0a1128 !important;
+    border-color: #0a1128 !important;
+}
+
+/* 2) Tous les textes “bleu ciel” (liens, titres, nav, labels…) deviennent #FFFFFF (blanc) */
+a,
+.nav-link,
+
+.sidebar a,
+.breadcrumb a,
+.brand-link,
+.module h2,
+.content-header h1,
+.content-header h2,
+.content-header h3,
+.content-header .breadcrumb-item.active,
+.box-title,
+
+.module caption {
+    color: #ABC2D7 !important;
+}
+
+
+
+/* 3) Boutons “Add” / “Modifier” / “Submit” en orange (#dc5f18) */
+.btn-default,
+.btn-addlink,
+.addlink a,
+.submit-row input,
+.changeform-form .submit-row input[type=submit] {
+    background-color: #dc5f18 !important;
+    border-color: #dc5f18 !important;
+    color: #FFFFFF !important;
+}
+
+/* 4) Dans le panneau “Actions récentes”, fond sombre et texte blanc */
+#recent-actions,
+.module.recent-actions {
+    background-color: #0a1128 !important;
+    color: #FFFFFF !important;
+}
+
+.module.recent-actions a {
+    color: #dc5f18 !important;
+}
+
+/* 5) Pour s’assurer que les icônes et bordures secondaires n’apparaissent plus en vert/bleu clair */
+.label-success,
+.label-info,
+.callout.callout-success,
+.callout.callout-info {
+    background-color: #dc5f18 !important;
+    color: #FFFFFF !important;
+}
+
+/* 6) Tableaux (change-list) : texte sombre sur fond clair */
+.change-list .results th,
+.change-list .results td {
+    color: #1F2937 !important;
+}
+
+/* 7) Les labels/inputs de formulaire (ex. nom d’utilisateur créé) */
+fieldset.module table th,
+fieldset.module table td {
+    color: #1F2937 !important;
+}
+
+/* 8) Boutons “Envoyer”, “Ajouter” (y compris dans les inlines/formulaire) */
+button,
+input[type="submit"],
+input[type="button"],
+a.button,
+.addlink a,
+.btn,
+.btn-primary {
+    background-color: #dc5f18 !important;
+    border-color: #dc5f18 !important;
+    color: #FFFFFF !important;
+}
+
+/* 9) Liens “Envoyer” de l’inline/add-on (ex. “Ajouter another”) */
+.inline-related a,
+.related-widget-wrapper .add-related,
+.related-widget-wrapper .change-related {
+    color: #dc5f18 !important;
+}
+
+/* 10) S’assurer qu’aucun texte important n’est blanc sur fond blanc */
+.object-tools a,
+.object-tools button {
+    color: #1F2937 !important;
+}
+
+/* ————————————————————————————————————————————————————— */
+/* 11) Labels et textes des champs de création/modification */
+/* s'applique aux pages “Add” et “Change” (change-form) */
+.change-form .module th,
+.change-form .module td {
+    /* cellules de la table du formulaire */
+    color: #1F2937 !important;
+}
+
+.change-form .form-row label {
+    /* le label à gauche de chaque champ */
+    color: #1F2937 !important;
+}
+
+/* champs inputs / selects / textarea eux-mêmes */
+.change-form input[type="text"],
+.change-form input[type="email"],
+.change-form input[type="number"],
+.change-form input[type="url"],
+.change-form input[type="tel"],
+.change-form textarea,
+.change-form select {
+    background-color: #FFFFFF !important;
+    /* fond blanc */
+    color: #041226 !important;
+    /* texte gris sombre */
+    border: 1px solid #ccc !important;
+}
+
+/* placeholder éventuel */
+.change-form ::placeholder {
+    color: #888 !important;
+}
+
+/* boutons de soumission (en plus des règles précédentes) */
+.change-form .submit-row .default,
+.change-form .submit-row .save,
+.change-form .submit-row .add {
+    background-color: #dc5f18 !important;
+    border-color: #dc5f18 !important;
+    color: #FFFFFF !important;
+}
