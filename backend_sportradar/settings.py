@@ -8,16 +8,25 @@ from datetime import timedelta
 # Build paths inside the project
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-def get_env(var_name, default=None, cast=None, required=False):
-    value = config(var_name, default=default, cast=cast)
-    if required and not value:
-        raise ImproperlyConfigured(f"La variable d'environnement '{var_name}' n'est pas définie.")
-    return value
+def get_env(var_name, default=None, cast=str):
+    """
+    Récupère une variable d'environnement avec type casting.
+    Args:
+        var_name: Nom de la variable
+        default: Valeur par défaut si non trouvée
+        cast: Type de conversion (str, int, bool, etc.)
+    """
+    try:
+        return config(var_name, default=default, cast=cast)
+    except Exception as e:
+        if 'required' in str(e).lower():
+            raise ImproperlyConfigured(f"La variable {var_name} est requise mais non configurée")
+        return default
 
 # SECURITY
-SECRET_KEY = get_env('SECRET_KEY', required=True)
-DEBUG = get_env('DEBUG', default=False, cast=bool)
-ALLOWED_HOSTS = get_env('ALLOWED_HOSTS', default='', cast=Csv())
+SECRET_KEY = config('SECRET_KEY')
+DEBUG = config('DEBUG', default=False, cast=bool)
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 
 # Applications
 INSTALLED_APPS = [
@@ -78,7 +87,6 @@ WSGI_APPLICATION = 'backend_sportradar.wsgi.application'
 # Database
 DATABASES = {
     'default': dj_database_url.config(
-        default=get_env('DATABASE_URL', required=True),
         conn_max_age=600,
         ssl_require=True
     )
