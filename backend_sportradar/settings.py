@@ -5,16 +5,14 @@ from django.core.exceptions import ImproperlyConfigured
 import dj_database_url
 from datetime import timedelta
 
-# Build paths inside the project
+# --- Chemins de base ---
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# --- Helper pour récupérer les variables d'env ---
 def get_env(var_name, default=None, cast=str):
     """
     Récupère une variable d'environnement avec type casting.
-    Args:
-        var_name: Nom de la variable
-        default: Valeur par défaut si non trouvée
-        cast: Type de conversion (str, int, bool, etc.)
+    Lève ImproperlyConfigured si la variable est marquée comme required et absente.
     """
     try:
         return config(var_name, default=default, cast=cast)
@@ -23,14 +21,27 @@ def get_env(var_name, default=None, cast=str):
             raise ImproperlyConfigured(f"La variable {var_name} est requise mais non configurée")
         return default
 
-# SECURITY
-SECRET_KEY = config('SECRET_KEY')
-DEBUG = config('DEBUG', default=False, cast=bool)
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', 
-                      default='localhost,127.0.0.1', 
-                      cast=Csv())
+# --- Sécurité générale ---
+SECRET_KEY = get_env('SECRET_KEY')  # Doit être défini en PROD et en DEV
+DEBUG = get_env('DEBUG', default=False, cast=bool)
+ALLOWED_HOSTS = get_env('ALLOWED_HOSTS',
+                        default='localhost,127.0.0.1',
+                        cast=Csv())
 
-# Applications
+# HSTS & redirections HTTPS
+SECURE_SSL_REDIRECT = get_env('SECURE_SSL_REDIRECT', default=True, cast=bool)
+SECURE_HSTS_SECONDS = get_env('SECURE_HSTS_SECONDS', default=31536000, cast=int)  # 1 an
+SECURE_HSTS_INCLUDE_SUBDOMAINS = get_env('SECURE_HSTS_INCLUDE_SUBDOMAINS', default=True, cast=bool)
+SECURE_HSTS_PRELOAD = get_env('SECURE_HSTS_PRELOAD', default=True, cast=bool)
+
+# Cookies sécurisées
+SESSION_COOKIE_SECURE = get_env('SESSION_COOKIE_SECURE', default=True, cast=bool)
+CSRF_COOKIE_SECURE = get_env('CSRF_COOKIE_SECURE', default=True, cast=bool)
+
+# Si derrière un proxy (nginx, Render…), pour que Django détecte HTTPS
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# --- Applications installées ---
 INSTALLED_APPS = [
     'jazzmin',
     'django.contrib.admin',
@@ -48,7 +59,7 @@ INSTALLED_APPS = [
     'weather',
 ]
 
-# Jazzmin admin UI customizations
+# Jazzmin
 JAZZMIN_SETTINGS = {
     'site_title': 'SportRadar Admin',
     'welcome_sign': 'Bienvenue dans SportRadar',
@@ -74,7 +85,7 @@ AUTH_USER_MODEL = 'users.CustomUser'
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # sert les statics
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -86,13 +97,11 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'backend_sportradar.urls'
 WSGI_APPLICATION = 'backend_sportradar.wsgi.application'
 
-
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
-        'APP_DIRS': True,  # ← Essentiel pour l'admin
+        'DIRS': [BASE_DIR / 'templates'],
+        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -104,15 +113,26 @@ TEMPLATES = [
     },
 ]
 
-# Database
+# --- Base de données (DJag & Render compatible) ---
+# On construit d'abord une URL postgres via les variables individuelles
+default_db_url = (
+    f"postgres://"
+    f"{get_env('DB_USER', default=''):s}:"
+    f"{get_env('DB_PASSWORD', default=''):s}@"
+    f"{get_env('DB_HOST', default='localhost'):s}:"
+    f"{get_env('DB_PORT', default='5432'):s}/"
+    f"{get_env('DB_NAME', default='sportradar_db'):s}"
+)
+
 DATABASES = {
     'default': dj_database_url.config(
-        conn_max_age=600,
-        ssl_require=True
+        default=default_db_url,
+        conn_max_age=get_env('DB_CONN_MAX_AGE', default=600, cast=int),
+        ssl_require=not DEBUG
     )
 }
 
-# Password validation
+# --- Validation de mots de passe ---
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -120,35 +140,33 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# Internationalization
+# --- Internationalisation ---
 LANGUAGE_CODE = 'fr-fr'
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Paris'
 USE_I18N = True
 USE_TZ = True
 
-# Static files
+# --- Statiques & médias ---
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# Third‑party keys
+# --- Clé API tierces ---
 OPENWEATHER_API_KEY = get_env('OPENWEATHER_API_KEY', default='')
 
-# CORS
+# --- CORS ---
 CORS_ALLOWED_ORIGINS = get_env('CORS_ALLOWED_ORIGINS', default='', cast=Csv())
 
-# REST Framework / JWT
+# --- Django REST & JWT ---
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
 }
-
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
@@ -157,11 +175,11 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
-# Email
+# --- Email SMTP ---
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = get_env('EMAIL_HOST', default='smtp.sendgrid.net')
 EMAIL_PORT = get_env('EMAIL_PORT', default=587, cast=int)
 EMAIL_HOST_USER = get_env('EMAIL_HOST_USER', default='apikey')
 EMAIL_HOST_PASSWORD = get_env('EMAIL_HOST_PASSWORD', default='')
-EMAIL_USE_TLS = True
+EMAIL_USE_TLS = get_env('EMAIL_USE_TLS', default=True, cast=bool)
 DEFAULT_FROM_EMAIL = get_env('DEFAULT_FROM_EMAIL', default='no-reply@sportradar.com')
