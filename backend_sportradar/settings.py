@@ -160,6 +160,10 @@ OPENWEATHER_API_KEY = get_env('OPENWEATHER_API_KEY', default='')
 
 # --- CORS ---
 CORS_ALLOWED_ORIGINS = get_env('CORS_ALLOWED_ORIGINS', default='', cast=Csv())
+CORS_ALLOW_CREDENTIALS = True
+CSRF_TRUSTED_ORIGINS = ['https://sportradar-frontend.onrender.com']
+
+
 
 # --- Django REST & JWT ---
 REST_FRAMEWORK = {
