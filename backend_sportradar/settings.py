@@ -162,6 +162,18 @@ OPENWEATHER_API_KEY = get_env('OPENWEATHER_API_KEY', default='')
 CORS_ALLOWED_ORIGINS = get_env('CORS_ALLOWED_ORIGINS', default='', cast=Csv())
 CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = ['https://sportradar-frontend.onrender.com']
+# Autoriser votre frontend prod sur Render
+CORS_ALLOWED_ORIGINS = [
+  "https://ias-b3-1-lyon-g1-jjrh.onrender.com",
+  # Si vous travaillez en local aussi, autorisez-le :
+  "http://localhost:5173",
+]
+
+# Si vous voulez simplement autoriser toutes les origines (moins sécurisé) :
+# CORS_ALLOW_ALL_ORIGINS = True
+
+# Autoriser l’envoi de cookies / credentials si besoin
+CORS_ALLOW_CREDENTIALS = True
 
 
 
