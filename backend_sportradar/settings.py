@@ -209,30 +209,38 @@ DEFAULT_FROM_EMAIL = get_env('DEFAULT_FROM_EMAIL', default='no-reply@sportradar.
 INSTALLED_APPS += [
     'storages',
 ]
-
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-# Clés d’accès AWS (à placer dans ton .env, jamais en clair)
+# Clés d’accès AWS (à placer dans ton .env)
 AWS_ACCESS_KEY_ID     = config('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
 
 # Nom exact du bucket S3 (sensible à la casse)
-AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME', default='sportradar-django-media-2025')
+AWS_STORAGE_BUCKET_NAME = config(
+    'AWS_STORAGE_BUCKET_NAME',
+    default='sportradar-django-media-2025'
+)
 
 # Région du bucket
-AWS_S3_REGION_NAME = config('AWS_S3_REGION_NAME', default='eu-north-1')
+AWS_S3_REGION_NAME = config(
+    'AWS_S3_REGION_NAME',
+    default='eu-north-1'
+)
 
-# Domaine personnalisé pour servir les fichiers
-AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com"
+# Domaine personnalisé pour servir les médias
+AWS_S3_CUSTOM_DOMAIN = (
+    f"{AWS_STORAGE_BUCKET_NAME}.s3."
+    f"{AWS_S3_REGION_NAME}.amazonaws.com"
+)
 
-# Point d’accès public pour les médias
+# URL de base pour les médias
 MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
 
-# On désactive les ACL signées, et on rend les objets public‑read par défaut
-AWS_DEFAULT_ACL       = 'public-read'
-AWS_QUERYSTRING_AUTH  = False
+# Autorisations publiques et désactivation des URLs signées
+AWS_DEFAULT_ACL      = 'public-read'
+AWS_QUERYSTRING_AUTH = False
 
-# En-têtes supplémentaires pour optimiser la mise en cache des objets
+# En-têtes HTTP pour le cache
 AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400, must-revalidate',
 }
