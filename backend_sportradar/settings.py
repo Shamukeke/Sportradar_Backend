@@ -210,22 +210,31 @@ INSTALLED_APPS += [
     'storages',
 ]
 
+# Configuration S3
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
+# Authentification
+AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')  # Récupéré depuis .env
+AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')  # Récupéré depuis .env
 
-# récupérées via python-decouple ou os.environ
-AWS_ACCESS_KEY_ID        = config('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY    = config('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME  = 'sportradar-django-media-2025'
-AWS_S3_REGION_NAME       = 'eu-north-1'
+# Nom du bucket - doit correspondre exactement à celui créé dans AWS S3
+AWS_STORAGE_BUCKET_NAME = 'sportradar-django-media-2025'  # Nom exact et sensible à la casse
 
-AWS_S3_CUSTOM_DOMAIN     = f'{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com'
+# Région
+AWS_S3_REGION_NAME = 'eu-north-1'  # Doit correspondre à la région de votre bucket
 
-DEFAULT_FILE_STORAGE     = 'storages.backends.s3boto3.S3Boto3Storage'
-AWS_DEFAULT_ACL          = 'public-read'
-AWS_QUERYSTRING_AUTH     = False
+# Configuration des URLs
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com'
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
 
-MEDIA_URL                = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
+# Permissions
+AWS_DEFAULT_ACL = 'public-read'  # Pour permettre l'accès public aux fichiers
+AWS_QUERYSTRING_AUTH = False  # Pour éviter les URLs signées complexes
 
+# Optimisation (optionnel)
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',  # Cache de 1 jour
+}
 
 
 
