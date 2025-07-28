@@ -209,34 +209,19 @@ DEFAULT_FROM_EMAIL = get_env('DEFAULT_FROM_EMAIL', default='no-reply@sportradar.
 INSTALLED_APPS += [
     'storages',
 ]
+
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-# Clés d’accès AWS (à placer dans ton .env)
-AWS_ACCESS_KEY_ID     = config('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
+# récupérées via python-decouple ou os.environ
+AWS_ACCESS_KEY_ID = get_env('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = get_env('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = get_env('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_REGION_NAME = get_env('AWS_S3_REGION_NAME', default='eu-north-1')
 
-# Nom exact du bucket S3 (sensible à la casse)
-AWS_STORAGE_BUCKET_NAME = config(
-    'AWS_STORAGE_BUCKET_NAME',
-    default='sportradar-django-media-2025'
-)
 
-# Région du bucket
-AWS_S3_REGION_NAME = config(
-    'AWS_S3_REGION_NAME',
-    default='eu-north-1'
-)
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com'
 
-# Domaine personnalisé pour servir les médias
-AWS_S3_CUSTOM_DOMAIN = (
-    f"{AWS_STORAGE_BUCKET_NAME}.s3."
-    f"{AWS_S3_REGION_NAME}.amazonaws.com"
-)
-
-# URL de base pour les médias
-MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
-
-# Autorisations publiques et désactivation des URLs signées
-AWS_DEFAULT_ACL      = 'public-read'
+AWS_DEFAULT_ACL = 'public-read'  
 AWS_QUERYSTRING_AUTH = False
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
 
