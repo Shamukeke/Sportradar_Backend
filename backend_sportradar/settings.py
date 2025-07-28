@@ -59,6 +59,8 @@ INSTALLED_APPS = [
     'weather',
 ]
 
+
+
 # Jazzmin
 JAZZMIN_SETTINGS = {
     'site_title': 'SportRadar Admin',
@@ -113,6 +115,12 @@ TEMPLATES = [
     },
 ]
 
+
+# Utiliser S3 pour MEDIA
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+
+
 # --- Base de données (DJag & Render compatible) ---
 # On construit d'abord une URL postgres via les variables individuelles
 default_db_url = (
@@ -152,8 +160,7 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+
 
 # --- Clé API tierces ---
 OPENWEATHER_API_KEY = get_env('OPENWEATHER_API_KEY', default='')
@@ -199,3 +206,20 @@ EMAIL_HOST_USER = get_env('EMAIL_HOST_USER', default='apikey')
 EMAIL_HOST_PASSWORD = get_env('EMAIL_HOST_PASSWORD', default='')
 EMAIL_USE_TLS = get_env('EMAIL_USE_TLS', default=True, cast=bool)
 DEFAULT_FROM_EMAIL = get_env('DEFAULT_FROM_EMAIL', default='no-reply@sportradar.com')
+
+# --- MEDIA on S3 ---
+INSTALLED_APPS += [
+    'storages',
+]
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+# récupérées via python-decouple ou os.environ
+AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_REGION_NAME = config('AWS_S3_REGION_NAME')
+
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com'
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
+
