@@ -240,7 +240,3 @@ MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
 AWS_DEFAULT_ACL      = 'public-read'
 AWS_QUERYSTRING_AUTH = False
 
-# En-têtes HTTP pour le cache
-AWS_S3_OBJECT_PARAMETERS = {
-    'CacheControl': 'max-age=86400, must-revalidate',
-}
