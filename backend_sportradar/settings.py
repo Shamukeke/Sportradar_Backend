@@ -1,5 +1,5 @@
-from pathlib import Path
 import os
+from pathlib import Path
 from decouple import config, Csv
 from django.core.exceptions import ImproperlyConfigured
 import dj_database_url
@@ -116,8 +116,6 @@ TEMPLATES = [
 ]
 
 
-# Utiliser S3 pour MEDIA
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 
 
@@ -215,10 +213,10 @@ INSTALLED_APPS += [
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 # récupérées via python-decouple ou os.environ
-AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
-AWS_S3_REGION_NAME = config('AWS_S3_REGION_NAME')
+AWS_ACCESS_KEY_ID = get_env('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = get_env('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = get_env('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_REGION_NAME = get_env('AWS_S3_REGION_NAME', default='eu-north-1')
 
 AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com'
 MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
