@@ -221,7 +221,7 @@ AWS_S3_REGION_NAME = get_env('AWS_S3_REGION_NAME', default='eu-north-1')
 
 AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com'
 
-AWS_DEFAULT_ACL = 'public-read'  
+AWS_DEFAULT_ACL = None  
 AWS_QUERYSTRING_AUTH = False
 
 MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
