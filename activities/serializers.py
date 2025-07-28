@@ -8,6 +8,7 @@ class ActivitySerializer(serializers.ModelSerializer):
     created_by = serializers.ReadOnlyField(source='created_by.username')
     participants = serializers.IntegerField(read_only=True)
     is_waiting = serializers.SerializerMethodField()
+    image = serializers.ImageField(use_url=True) 
 
     class Meta:
         model = Activity
