@@ -210,19 +210,22 @@ INSTALLED_APPS += [
     'storages',
 ]
 
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
 
 # récupérées via python-decouple ou os.environ
-AWS_ACCESS_KEY_ID = get_env('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = get_env('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = get_env('AWS_STORAGE_BUCKET_NAME')
-AWS_S3_REGION_NAME = get_env('AWS_S3_REGION_NAME', default='eu-north-1')
+AWS_ACCESS_KEY_ID        = config('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY    = config('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME  = 'sportradar-django-media-2025'
+AWS_S3_REGION_NAME       = 'eu-north-1'
+
+AWS_S3_CUSTOM_DOMAIN     = f'{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com'
+
+DEFAULT_FILE_STORAGE     = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_DEFAULT_ACL          = 'public-read'
+AWS_QUERYSTRING_AUTH     = False
+
+MEDIA_URL                = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
 
 
-AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com'
 
-AWS_DEFAULT_ACL = None  
-AWS_QUERYSTRING_AUTH = False
-
-MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
 
