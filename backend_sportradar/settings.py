@@ -117,6 +117,20 @@ TEMPLATES = [
     },
 ]
 
+
+CORS_ALLOWED_ORIGINS = get_env(
+    'CORS_ALLOWED_ORIGINS',
+    default='http://localhost:5173,https://ias-b3-1-lyon-g1-jjrh.onrender.com',
+    cast=Csv()
+)
+CORS_ALLOW_CREDENTIALS = True
+CSRF_TRUSTED_ORIGINS = get_env(
+    'CSRF_TRUSTED_ORIGINS',
+    default='https://ias-b3-1-lyon-g1.onrender.com,https://ias-b3-1-lyon-g1-jjrh.onrender.com',
+    cast=Csv()
+)
+
+
 # --- Base de données (Postgres/Render compatible + DEV sans dj_database_url) ---
 # Dans settings.py
 # settings.py
@@ -168,17 +182,6 @@ OPENWEATHER_API_KEY = get_env('OPENWEATHER_API_KEY', default='')
 
 # --- CORS (format CSV attendu par decouple) ---
 # --- CORS ---
-CORS_ALLOWED_ORIGINS = get_env(
-    'CORS_ALLOWED_ORIGINS',
-    default='http://localhost:5173,https://ias-b3-1-lyon-g1-jjrh.onrender.com',
-    cast=Csv()
-)
-CORS_ALLOW_CREDENTIALS = True
-CSRF_TRUSTED_ORIGINS = get_env(
-    'CSRF_TRUSTED_ORIGINS',
-    default='https://ias-b3-1-lyon-g1.onrender.com,https://ias-b3-1-lyon-g1-jjrh.onrender.com',
-    cast=Csv()
-)
 
 
 # --- Django REST & JWT ---
