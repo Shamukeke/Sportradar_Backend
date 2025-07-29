@@ -10,7 +10,7 @@ from datetime import timedelta
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # --- Chargement du bon .env selon DJANGO_ENV ---
-env = os.getenv('DJANGO_ENV', 'development').lower()
+env = os.getenv('DJANGO_ENV', 'production').lower()
 dotenv_path = BASE_DIR / ('.env.development' if env == 'development' else '.env')
 load_dotenv(dotenv_path)
 
