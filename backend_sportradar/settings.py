@@ -140,6 +140,7 @@ else:
             default=get_env('DATABASE_URL'),
             conn_max_age=get_env('DB_CONN_MAX_AGE', default=600, cast=int),
             ssl_require=True,
+            engine='django.db.backends.postgresql',
     )
 }
 # --- Validation de mots de passe ---
@@ -166,16 +167,18 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 OPENWEATHER_API_KEY = get_env('OPENWEATHER_API_KEY', default='')
 
 # --- CORS (format CSV attendu par decouple) ---
-if DEBUG:
-    CORS_ALLOWED_ORIGINS = ['http://localhost:5173']
-else:
-    CORS_ALLOWED_ORIGINS = config(
-        'CORS_ALLOWED_ORIGINS',
-        default='',
-        cast=Csv()
-    )
+# --- CORS ---
+CORS_ALLOWED_ORIGINS = get_env(
+    'CORS_ALLOWED_ORIGINS',
+    default='http://localhost:5173,https://ias-b3-1-lyon-g1-jjrh.onrender.com',
+    cast=Csv()
+)
 CORS_ALLOW_CREDENTIALS = True
-CSRF_TRUSTED_ORIGINS = ['https://sportradar-frontend.onrender.com']
+CSRF_TRUSTED_ORIGINS = get_env(
+    'CSRF_TRUSTED_ORIGINS',
+    default='https://ias-b3-1-lyon-g1.onrender.com,https://ias-b3-1-lyon-g1-jjrh.onrender.com',
+    cast=Csv()
+)
 
 
 # --- Django REST & JWT ---
