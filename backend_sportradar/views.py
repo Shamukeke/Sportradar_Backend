@@ -2,6 +2,7 @@
 
 from django.http import HttpResponse
 
+
 def robots_txt(request):
     lines = [
         "User-agent: *",

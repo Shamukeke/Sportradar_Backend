@@ -9,6 +9,10 @@ from django.contrib.sitemaps.views import sitemap
 from django.contrib.sitemaps import Sitemap
 from activities.models import Activity
 from activities.views import ActivityViewSet
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from django.db.models import QuerySet
 from weather.views import weather_api
 from backend_sportradar.views import robots_txt
 
@@ -31,7 +35,7 @@ class ActivitySitemap(Sitemap):
     priority = 0.8
 
     def items(self):
-        return Activity.objects.all()
+        return Activity.objects.all() or [Activity(id=1)]  # type: ignore
 
     def location(self, obj):
         return f"/activities/{obj.id}/"
