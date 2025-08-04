@@ -1,0 +1,15 @@
+# Autoriser tous les robots à indexer le site
+User-agent: *
+
+# Ne pas indexer les endpoints d’API ou répertoires sensibles
+Disallow: /admin/
+Disallow: /api/
+Disallow: /static/
+Disallow: /media/
+
+# Ne pas indexer les pages privées ou personnelles
+Disallow: /dashboard
+Disallow: /profile
+
+# Autoriser le sitemap
+Sitemap: https://ias-b3-1-lyon-g1-jjrh.onrender.com/sitemap.xml

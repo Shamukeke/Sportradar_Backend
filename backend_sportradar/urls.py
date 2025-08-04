@@ -10,6 +10,7 @@ from django.contrib.sitemaps import Sitemap
 from activities.models import Activity
 from activities.views import ActivityViewSet
 from weather.views import weather_api
+from backend_sportradar.views import robots_txt
 
 
 class StaticViewSitemap(Sitemap):
@@ -72,4 +73,5 @@ sitemaps = {
 
 urlpatterns += [
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='sitemap'),
+    path('robots.txt', robots_txt),
 ]
