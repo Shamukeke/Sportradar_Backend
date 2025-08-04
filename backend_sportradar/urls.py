@@ -5,8 +5,35 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.sitemaps.views import sitemap
+from django.contrib.sitemaps import Sitemap
+from activities.models import Activity
 from activities.views import ActivityViewSet
 from weather.views import weather_api
+
+
+class StaticViewSitemap(Sitemap):
+    changefreq = "monthly"
+    priority = 0.5
+
+    def items(self):
+        return [
+            '/', '/dashboard', '/faq', '/privacy', '/legal',
+            '/recommendations', '/badges', '/corporate-offers', '/profile'
+        ]
+
+    def location(self, item):
+        return item
+
+class ActivitySitemap(Sitemap):
+    changefreq = "weekly"
+    priority = 0.8
+
+    def items(self):
+        return Activity.objects.all()
+
+    def location(self, obj):
+        return f"/activities/{obj.id}/"
 
 
 urlpatterns = [
@@ -37,3 +64,12 @@ urlpatterns += static(settings.MEDIA_URL,
                           document_root=settings.MEDIA_ROOT)
 
 urlpatterns += staticfiles_urlpatterns()
+
+sitemaps = {
+    'static': StaticViewSitemap(),
+    'activities': ActivitySitemap(),
+}
+
+urlpatterns += [
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='sitemap'),
+]

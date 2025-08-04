@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'companies',
     'subscriptions',
     'weather',
+    'django.contrib.sitemaps',
 ]
 
 # Jazzmin config (inchangée)
@@ -220,3 +221,4 @@ AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazo
 AWS_DEFAULT_ACL = 'public-read'
 AWS_QUERYSTRING_AUTH = False
 MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
+
