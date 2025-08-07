@@ -40,6 +40,10 @@ class ActivitySitemap(Sitemap):
     def location(self, obj):
         return f"/activities/{obj.id}/"
 
+sitemaps = {
+    'static': StaticViewSitemap(),
+    'activities': ActivitySitemap(),
+}
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -59,6 +63,8 @@ urlpatterns = [
     path('api/companies/', include('companies.urls')),
     path('api/subscriptions/',include('subscriptions.urls')),
     path('api/places/', include('companies.urls')),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='sitemap'),
+    path('robots.txt', robots_txt),
     
     
 ]
@@ -70,12 +76,3 @@ urlpatterns += static(settings.MEDIA_URL,
 
 urlpatterns += staticfiles_urlpatterns()
 
-sitemaps = {
-    'static': StaticViewSitemap(),
-    'activities': ActivitySitemap(),
-}
-
-urlpatterns += [
-    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='sitemap'),
-    path('robots.txt', robots_txt),
-]
